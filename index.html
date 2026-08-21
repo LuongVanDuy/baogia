@@ -99,7 +99,7 @@
         <div class="preview-wrap">
           <article class="quote-paper" id="quotePreview">
             <div class="quote-heading">
-              <img id="companyStamp" class="company-stamp" alt="Dấu đỏ công ty" />
+              <img id="companyStamp" class="company-stamp" src="company-stamp.svg" alt="Dấu đỏ công ty" />
               <h1 class="quote-title">BÁO GIÁ</h1>
             </div>
 
@@ -150,6 +150,12 @@
             <div class="terms-title">CÁC ĐIỀU KHOẢN ĐẶT HÀNG:</div>
             <ul class="terms" id="previewTerms"></ul>
 
+            <div class="bank-info">
+              <div>CTK: CÔNG TY TNHH IN ĐẠI DƯƠNG VIỆT NAM</div>
+              <div>STK: 115002776534</div>
+              <div>Ngân hàng: Viettinbank chi nhánh Quang Trung</div>
+            </div>
+
             <div class="signature">
               <div class="signature-box">
                 <div class="role">NHÂN VIÊN KINH DOANH</div>
@@ -182,8 +188,28 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.min.js"></script>
   <script src="app.js"></script>
+  <script>
+    (() => {
+      const oldBtn = document.getElementById('pdfBtn');
+      if (!oldBtn) return;
+      const pdfBtn = oldBtn.cloneNode(true);
+      oldBtn.replaceWith(pdfBtn);
+      pdfBtn.addEventListener('click', () => {
+        const oldTitle = document.title;
+        const quoteNo = (document.getElementById('pQuoteNo')?.textContent || 'bao-gia').trim();
+        document.title = quoteNo.replace(/[^a-zA-Z0-9_-]+/g, '-');
+        const status = document.getElementById('status');
+        if (status) {
+          status.textContent = 'Đang mở bản in PDF chất lượng cao. Chọn “Save as PDF / Lưu thành PDF” trong hộp thoại in.';
+          status.className = 'status ok';
+        }
+        const restore = () => { document.title = oldTitle; window.removeEventListener('afterprint', restore); };
+        window.addEventListener('afterprint', restore);
+        requestAnimationFrame(() => requestAnimationFrame(() => window.print()));
+        setTimeout(() => { if (document.title !== oldTitle) document.title = oldTitle; }, 120000);
+      });
+    })();
+  </script>
 </body>
 </html>
