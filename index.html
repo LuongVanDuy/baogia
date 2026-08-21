@@ -44,7 +44,6 @@
         <div class="editor-panel-head">
           <div>
             <h2>Nội dung báo giá</h2>
-            <p>Nhập thông tin, hàng hóa và điều khoản ở một nơi.</p>
           </div>
         </div>
 
@@ -61,7 +60,7 @@
             </label>
             <label class="field">
               <span>Địa chỉ / Address</span>
-              <textarea id="buyerAddress" rows="3" placeholder="Nhập địa chỉ khách hàng"></textarea>
+              <input id="buyerAddress" type="text" autocomplete="street-address" placeholder="Nhập địa chỉ khách hàng" />
             </label>
           </div>
 
@@ -117,11 +116,10 @@
         <div class="editor-card">
           <div class="card-heading">
             <h3>Điều khoản đặt hàng</h3>
-            <span class="helper-text">Mỗi dòng là một điều khoản</span>
+            <button class="btn compact" id="addTermBtn" type="button">+ Thêm điều khoản</button>
           </div>
-          <label class="field no-margin">
-            <textarea id="termsInput" rows="6" placeholder="Nhập các điều khoản..."></textarea>
-          </label>
+          <input id="termsInput" type="hidden" />
+          <div id="termsEditor" class="terms-editor"></div>
         </div>
 
         <details class="editor-card seller-card">
@@ -132,7 +130,7 @@
           <div class="seller-body">
             <div class="form-grid one">
               <label class="field"><span>Tên công ty</span><input id="sellerCompany" /></label>
-              <label class="field"><span>Địa chỉ / Address</span><textarea id="sellerAddress" rows="3"></textarea></label>
+              <label class="field"><span>Địa chỉ / Address</span><input id="sellerAddress" type="text" /></label>
             </div>
             <div class="form-grid two">
               <label class="field"><span>Mã số thuế</span><input id="sellerTax" /></label>
@@ -190,11 +188,11 @@
             <table class="quote-table">
               <colgroup>
                 <col style="width:5%" />
-                <col style="width:39%" />
+                <col style="width:38%" />
                 <col style="width:10%" />
                 <col style="width:10%" />
-                <col style="width:14%" />
-                <col style="width:22%" />
+                <col style="width:12%" />
+                <col style="width:25%" />
               </colgroup>
               <thead>
                 <tr class="header-top">
@@ -261,5 +259,6 @@
   <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
   <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
   <script src="app.js"></script>
+  <script src="ui-polish.js"></script>
 </body>
 </html>
