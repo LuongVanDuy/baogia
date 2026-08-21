@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#123f75" />
+  <meta name="theme-color" content="#184b7a" />
   <title>Báo giá · In Đại Dương Việt Nam</title>
-  <meta name="description" content="Tạo báo giá, lưu từng báo giá thành JSON và xuất DOCX, XLSX, PDF." />
+  <meta name="description" content="Tạo báo giá, lưu JSON và xuất DOCX, XLSX, PDF." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -16,17 +16,12 @@
         <div>
           <div class="eyebrow">IN ĐẠI DƯƠNG VIỆT NAM</div>
           <h1>Quản lý báo giá</h1>
-          <p>Tạo nhanh · Lưu JSON · Xuất Word / Excel / PDF</p>
         </div>
       </div>
 
       <div class="header-actions">
-        <button class="btn ghost" id="newBtn" type="button">
-          <span class="btn-icon">＋</span><span>Báo giá mới</span>
-        </button>
-        <button class="btn primary" id="saveBtn" type="button">
-          <span class="btn-icon">✓</span><span>Lưu báo giá</span>
-        </button>
+        <button class="btn" id="newBtn" type="button">Báo giá mới</button>
+        <button class="btn primary" id="saveBtn" type="button">Lưu báo giá</button>
       </div>
     </header>
 
@@ -35,55 +30,38 @@
         <span class="storage-dot" id="storageDot"></span>
         <div>
           <strong id="storageTitle">Dữ liệu đang lưu tạm trên trình duyệt</strong>
-          <p id="storageText">Kết nối thư mục dự án để hệ thống tự tạo <code>data/</code> và lưu mỗi báo giá thành một file JSON riêng.</p>
+          <p id="storageText">Kết nối thư mục dự án để lưu từng báo giá vào <code>data/</code>.</p>
         </div>
       </div>
       <div class="data-actions">
-        <button class="btn compact" id="connectDataBtn" type="button">Kết nối thư mục data</button>
-        <button class="btn compact ghost" id="syncDataBtn" type="button" disabled>Đồng bộ data</button>
+        <button class="btn compact" id="connectDataBtn" type="button">Kết nối data</button>
+        <button class="btn compact" id="syncDataBtn" type="button" disabled>Đồng bộ</button>
       </div>
     </section>
 
-    <nav class="export-bar" aria-label="Xuất báo giá">
-      <div class="export-label">
-        <span>Xuất tài liệu</span>
-        <small>Giữ bố cục gần mẫu báo giá gốc</small>
-      </div>
-      <div class="export-actions">
-        <button class="export-btn word" id="wordBtn" type="button">
-          <span class="export-icon">W</span>
-          <span><b>Word</b><small>.docx</small></span>
-        </button>
-        <button class="export-btn excel" id="excelBtn" type="button">
-          <span class="export-icon">X</span>
-          <span><b>Excel</b><small>.xlsx</small></span>
-        </button>
-        <button class="export-btn pdf" id="pdfBtn" type="button">
-          <span class="export-icon">P</span>
-          <span><b>PDF</b><small>A4 nét</small></span>
-        </button>
-      </div>
-    </nav>
-
     <main class="workspace">
-      <section class="editor-column">
+      <section class="editor-panel">
+        <div class="editor-panel-head">
+          <div>
+            <h2>Nội dung báo giá</h2>
+            <p>Nhập thông tin, hàng hóa và điều khoản ở một nơi.</p>
+          </div>
+        </div>
+
         <div class="editor-card">
           <div class="card-heading">
-            <div>
-              <span class="step-badge">01</span>
-              <h2>Thông tin khách hàng</h2>
-            </div>
+            <h3>Khách hàng</h3>
             <span class="required-note">* Bắt buộc</span>
           </div>
 
           <div class="form-grid one">
             <label class="field">
               <span>Tên công ty / Company <em>*</em></span>
-              <input id="buyerCompany" autocomplete="organization" placeholder="Ví dụ: CÔNG TY CỔ PHẦN VIE IP" />
+              <input id="buyerCompany" autocomplete="organization" placeholder="Nhập tên công ty khách hàng" />
             </label>
             <label class="field">
               <span>Địa chỉ / Address</span>
-              <textarea id="buyerAddress" rows="2" placeholder="Nhập địa chỉ khách hàng"></textarea>
+              <textarea id="buyerAddress" rows="3" placeholder="Nhập địa chỉ khách hàng"></textarea>
             </label>
           </div>
 
@@ -117,12 +95,9 @@
         </div>
 
         <div class="editor-card items-card">
-          <div class="card-heading items-heading">
-            <div>
-              <span class="step-badge">02</span>
-              <h2>Hàng hóa / Dịch vụ</h2>
-            </div>
-            <button class="btn compact primary-soft" id="addItemBtn" type="button">＋ Thêm hàng</button>
+          <div class="card-heading">
+            <h3>Hàng hóa / Dịch vụ</h3>
+            <button class="btn compact" id="addItemBtn" type="button">+ Thêm hàng</button>
           </div>
 
           <div class="item-table-shell">
@@ -132,21 +107,17 @@
               <div>Đơn vị</div>
               <div>Số lượng</div>
               <div>Đơn giá</div>
-              <div>Thành tiền</div>
               <div></div>
             </div>
             <div id="itemsEditor" class="items-editor"></div>
           </div>
-          <button class="add-row-full" id="addItemBottomBtn" type="button">＋ Thêm một hàng hóa / dịch vụ</button>
+          <button class="add-row-full" id="addItemBottomBtn" type="button">+ Thêm hàng hóa / dịch vụ</button>
         </div>
 
         <div class="editor-card">
           <div class="card-heading">
-            <div>
-              <span class="step-badge">03</span>
-              <h2>Điều khoản đặt hàng</h2>
-            </div>
-            <span class="helper-text">Mỗi dòng = 1 điều khoản</span>
+            <h3>Điều khoản đặt hàng</h3>
+            <span class="helper-text">Mỗi dòng là một điều khoản</span>
           </div>
           <label class="field no-margin">
             <textarea id="termsInput" rows="6" placeholder="Nhập các điều khoản..."></textarea>
@@ -155,13 +126,13 @@
 
         <details class="editor-card seller-card">
           <summary>
-            <span><span class="step-badge muted">04</span><strong>Thông tin bên bán & tài khoản</strong></span>
+            <span>Thông tin bên bán & tài khoản</span>
             <small>Đã điền theo mẫu</small>
           </summary>
           <div class="seller-body">
             <div class="form-grid one">
               <label class="field"><span>Tên công ty</span><input id="sellerCompany" /></label>
-              <label class="field"><span>Địa chỉ</span><textarea id="sellerAddress" rows="2"></textarea></label>
+              <label class="field"><span>Địa chỉ / Address</span><textarea id="sellerAddress" rows="3"></textarea></label>
             </div>
             <div class="form-grid two">
               <label class="field"><span>Mã số thuế</span><input id="sellerTax" /></label>
@@ -179,11 +150,16 @@
 
       <aside class="preview-column">
         <div class="preview-toolbar">
-          <div>
+          <div class="preview-title">
             <strong>Xem trước A4</strong>
-            <span id="previewState">Đang cập nhật</span>
+            <span id="previewState">Sẵn sàng</span>
           </div>
-          <button class="btn compact ghost" id="scrollHistoryBtn" type="button">Lịch sử ↓</button>
+          <div class="preview-actions">
+            <button class="doc-btn" id="wordBtn" type="button">Word</button>
+            <button class="doc-btn" id="excelBtn" type="button">Excel</button>
+            <button class="doc-btn primary" id="pdfBtn" type="button">PDF</button>
+            <button class="doc-btn" id="scrollHistoryBtn" type="button">Lịch sử</button>
+          </div>
         </div>
 
         <div class="preview-wrap">
@@ -214,11 +190,11 @@
             <table class="quote-table">
               <colgroup>
                 <col style="width:5%" />
-                <col style="width:35%" />
+                <col style="width:39%" />
                 <col style="width:10%" />
-                <col style="width:11%" />
-                <col style="width:19%" />
-                <col style="width:20%" />
+                <col style="width:10%" />
+                <col style="width:14%" />
+                <col style="width:22%" />
               </colgroup>
               <thead>
                 <tr class="header-top">
@@ -267,14 +243,13 @@
     <section class="history-section" id="historySection">
       <div class="history-heading">
         <div>
-          <span class="eyebrow">DATABASE BÁO GIÁ</span>
           <h2>Lịch sử báo giá</h2>
-          <p>Mỗi báo giá có thể được lưu thành một JSON riêng trong thư mục <code>data/</code>.</p>
+          <p>Mỗi báo giá có thể lưu thành một file JSON riêng trong <code>data/</code>.</p>
         </div>
         <div class="history-actions">
           <input class="history-search" id="historySearch" type="search" placeholder="Tìm PO hoặc khách hàng..." />
-          <button class="btn compact ghost" id="downloadJsonBtn" type="button">Xuất JSON tổng</button>
-          <button class="btn compact ghost" id="importJsonBtn" type="button">Nhập JSON</button>
+          <button class="btn compact" id="downloadJsonBtn" type="button">Xuất JSON</button>
+          <button class="btn compact" id="importJsonBtn" type="button">Nhập JSON</button>
           <input type="file" id="jsonFileInput" accept="application/json,.json" hidden />
           <button class="btn compact danger-soft" id="clearHistoryBtn" type="button">Xóa dữ liệu</button>
         </div>
