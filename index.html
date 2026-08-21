@@ -3,99 +3,189 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tạo báo giá - In Đại Dương Việt Nam</title>
-  <meta name="description" content="Tạo, lưu lịch sử và xuất báo giá ra Word, Excel, PDF." />
+  <meta name="theme-color" content="#123f75" />
+  <title>Báo giá · In Đại Dương Việt Nam</title>
+  <meta name="description" content="Tạo báo giá, lưu từng báo giá thành JSON và xuất DOCX, XLSX, PDF." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main class="app-shell">
-    <header class="topbar">
-      <div class="brand">
-        <h1>Trình tạo báo giá</h1>
-        <p>Mẫu theo file “MAU BAO GIA” — lưu lịch sử JSON, xuất Word / Excel / PDF.</p>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand-block">
+        <div class="brand-mark" aria-hidden="true">ĐD</div>
+        <div>
+          <div class="eyebrow">IN ĐẠI DƯƠNG VIỆT NAM</div>
+          <h1>Quản lý báo giá</h1>
+          <p>Tạo nhanh · Lưu JSON · Xuất Word / Excel / PDF</p>
+        </div>
       </div>
-      <div class="toolbar">
-        <button class="btn primary" id="saveBtn">Lưu báo giá</button>
-        <button class="btn" id="wordBtn">Xuất Word</button>
-        <button class="btn" id="excelBtn">Xuất Excel</button>
-        <button class="btn" id="pdfBtn">Xuất PDF</button>
-        <button class="btn" id="newBtn">Báo giá mới</button>
+
+      <div class="header-actions">
+        <button class="btn ghost" id="newBtn" type="button">
+          <span class="btn-icon">＋</span><span>Báo giá mới</span>
+        </button>
+        <button class="btn primary" id="saveBtn" type="button">
+          <span class="btn-icon">✓</span><span>Lưu báo giá</span>
+        </button>
       </div>
     </header>
 
-    <section class="workspace">
-      <section class="panel editor-panel">
-        <div class="panel-header"><h2>Thông tin báo giá</h2></div>
-        <div class="panel-body">
-          <div class="section">
-            <div class="section-title"><h3>Bên mua / The buyer</h3></div>
-            <div class="field">
-              <label for="buyerCompany">TÊN CTY / Company</label>
-              <input id="buyerCompany" placeholder="Nhập tên công ty khách hàng" />
+    <section class="data-banner" id="dataBanner">
+      <div class="data-banner-main">
+        <span class="storage-dot" id="storageDot"></span>
+        <div>
+          <strong id="storageTitle">Dữ liệu đang lưu tạm trên trình duyệt</strong>
+          <p id="storageText">Kết nối thư mục dự án để hệ thống tự tạo <code>data/</code> và lưu mỗi báo giá thành một file JSON riêng.</p>
+        </div>
+      </div>
+      <div class="data-actions">
+        <button class="btn compact" id="connectDataBtn" type="button">Kết nối thư mục data</button>
+        <button class="btn compact ghost" id="syncDataBtn" type="button" disabled>Đồng bộ data</button>
+      </div>
+    </section>
+
+    <nav class="export-bar" aria-label="Xuất báo giá">
+      <div class="export-label">
+        <span>Xuất tài liệu</span>
+        <small>Giữ bố cục gần mẫu báo giá gốc</small>
+      </div>
+      <div class="export-actions">
+        <button class="export-btn word" id="wordBtn" type="button">
+          <span class="export-icon">W</span>
+          <span><b>Word</b><small>.docx</small></span>
+        </button>
+        <button class="export-btn excel" id="excelBtn" type="button">
+          <span class="export-icon">X</span>
+          <span><b>Excel</b><small>.xlsx</small></span>
+        </button>
+        <button class="export-btn pdf" id="pdfBtn" type="button">
+          <span class="export-icon">P</span>
+          <span><b>PDF</b><small>A4 nét</small></span>
+        </button>
+      </div>
+    </nav>
+
+    <main class="workspace">
+      <section class="editor-column">
+        <div class="editor-card">
+          <div class="card-heading">
+            <div>
+              <span class="step-badge">01</span>
+              <h2>Thông tin khách hàng</h2>
             </div>
-            <div class="field">
-              <label for="buyerAddress">ĐỊA CHỈ / Address</label>
-              <textarea id="buyerAddress" placeholder="Nhập địa chỉ khách hàng"></textarea>
-            </div>
-            <div class="grid-2">
-              <div class="field">
-                <label for="quoteNo">PO số</label>
-                <input id="quoteNo" />
-              </div>
-              <div class="field">
-                <label for="quoteDate">Ngày báo giá</label>
-                <input id="quoteDate" type="date" />
-              </div>
-            </div>
-            <div class="grid-2">
-              <div class="field">
-                <label for="vatRate">VAT (%)</label>
+            <span class="required-note">* Bắt buộc</span>
+          </div>
+
+          <div class="form-grid one">
+            <label class="field">
+              <span>Tên công ty / Company <em>*</em></span>
+              <input id="buyerCompany" autocomplete="organization" placeholder="Ví dụ: CÔNG TY CỔ PHẦN VIE IP" />
+            </label>
+            <label class="field">
+              <span>Địa chỉ / Address</span>
+              <textarea id="buyerAddress" rows="2" placeholder="Nhập địa chỉ khách hàng"></textarea>
+            </label>
+          </div>
+
+          <div class="form-grid two">
+            <label class="field">
+              <span>Mã số thuế / Tax code</span>
+              <input id="buyerTax" inputmode="numeric" placeholder="Nhập MST nếu có" />
+            </label>
+            <label class="field">
+              <span>Ngày báo giá</span>
+              <input id="quoteDate" type="date" />
+            </label>
+            <label class="field">
+              <span>PO số</span>
+              <input id="quoteNo" placeholder="PO_210826" />
+            </label>
+            <div class="field-split">
+              <label class="field">
+                <span>VAT (%)</span>
                 <input id="vatRate" type="number" min="0" max="100" step="0.1" value="8" />
-              </div>
-              <div class="field">
-                <label for="currency">Tiền tệ</label>
+              </label>
+              <label class="field">
+                <span>Tiền tệ</span>
                 <select id="currency">
                   <option value="VND">VNĐ</option>
                   <option value="USD">USD</option>
                 </select>
-              </div>
+              </label>
             </div>
           </div>
-
-          <div class="section">
-            <div class="section-title">
-              <h3>Hàng hóa / Dịch vụ</h3>
-              <button class="btn small success" id="addItemBtn">+ Thêm dòng</button>
-            </div>
-            <div id="itemsEditor"></div>
-          </div>
-
-          <div class="section">
-            <div class="section-title"><h3>Điều khoản</h3><span class="hint">Mỗi dòng là một điều khoản</span></div>
-            <div class="field">
-              <textarea id="termsInput" rows="7"></textarea>
-            </div>
-          </div>
-
-          <div class="section">
-            <details class="seller">
-              <summary>Thông tin bên bán (đã điền từ file mẫu)</summary>
-              <div class="details-body">
-                <div class="field"><label>Tên công ty</label><input id="sellerCompany" /></div>
-                <div class="field"><label>Địa chỉ</label><textarea id="sellerAddress"></textarea></div>
-                <div class="grid-2">
-                  <div class="field"><label>Mã số thuế</label><input id="sellerTax" /></div>
-                  <div class="field"><label>Người liên hệ</label><input id="sellerContact" /></div>
-                </div>
-                <div class="field"><label>Chức vụ</label><input id="sellerRole" /></div>
-              </div>
-            </details>
-          </div>
-          <div id="status" class="status"></div>
         </div>
+
+        <div class="editor-card items-card">
+          <div class="card-heading items-heading">
+            <div>
+              <span class="step-badge">02</span>
+              <h2>Hàng hóa / Dịch vụ</h2>
+            </div>
+            <button class="btn compact primary-soft" id="addItemBtn" type="button">＋ Thêm hàng</button>
+          </div>
+
+          <div class="item-table-shell">
+            <div class="item-table-header" aria-hidden="true">
+              <div>#</div>
+              <div>Tên hàng hóa / dịch vụ</div>
+              <div>Đơn vị</div>
+              <div>Số lượng</div>
+              <div>Đơn giá</div>
+              <div>Thành tiền</div>
+              <div></div>
+            </div>
+            <div id="itemsEditor" class="items-editor"></div>
+          </div>
+          <button class="add-row-full" id="addItemBottomBtn" type="button">＋ Thêm một hàng hóa / dịch vụ</button>
+        </div>
+
+        <div class="editor-card">
+          <div class="card-heading">
+            <div>
+              <span class="step-badge">03</span>
+              <h2>Điều khoản đặt hàng</h2>
+            </div>
+            <span class="helper-text">Mỗi dòng = 1 điều khoản</span>
+          </div>
+          <label class="field no-margin">
+            <textarea id="termsInput" rows="6" placeholder="Nhập các điều khoản..."></textarea>
+          </label>
+        </div>
+
+        <details class="editor-card seller-card">
+          <summary>
+            <span><span class="step-badge muted">04</span><strong>Thông tin bên bán & tài khoản</strong></span>
+            <small>Đã điền theo mẫu</small>
+          </summary>
+          <div class="seller-body">
+            <div class="form-grid one">
+              <label class="field"><span>Tên công ty</span><input id="sellerCompany" /></label>
+              <label class="field"><span>Địa chỉ</span><textarea id="sellerAddress" rows="2"></textarea></label>
+            </div>
+            <div class="form-grid two">
+              <label class="field"><span>Mã số thuế</span><input id="sellerTax" /></label>
+              <label class="field"><span>Người liên hệ</span><input id="sellerContact" /></label>
+              <label class="field"><span>Chức vụ</span><input id="sellerRole" /></label>
+              <label class="field"><span>Chủ tài khoản</span><input id="bankAccountName" /></label>
+              <label class="field"><span>Số tài khoản</span><input id="bankAccountNo" /></label>
+              <label class="field"><span>Ngân hàng</span><input id="bankName" /></label>
+            </div>
+          </div>
+        </details>
+
+        <div id="status" class="status" role="status" aria-live="polite"></div>
       </section>
 
-      <section class="panel preview-panel">
+      <aside class="preview-column">
+        <div class="preview-toolbar">
+          <div>
+            <strong>Xem trước A4</strong>
+            <span id="previewState">Đang cập nhật</span>
+          </div>
+          <button class="btn compact ghost" id="scrollHistoryBtn" type="button">Lịch sử ↓</button>
+        </div>
+
         <div class="preview-wrap">
           <article class="quote-paper" id="quotePreview">
             <div class="quote-heading">
@@ -112,6 +202,7 @@
             <div class="quote-section-label">BÊN MUA/The buyer</div>
             <div class="info-row"><div class="info-label">TÊN CTY/Company:</div><div class="strong" id="pBuyerCompany">—</div></div>
             <div class="info-row"><div class="info-label">ĐỊA CHỈ/Address:</div><div id="pBuyerAddress">—</div></div>
+            <div class="info-row optional-row" id="pBuyerTaxRow"><div class="info-label">MÃ SỐ THUẾ/Tax Code:</div><div id="pBuyerTax">—</div></div>
 
             <div class="quote-meta">
               <div id="pDateText"></div>
@@ -122,21 +213,25 @@
 
             <table class="quote-table">
               <colgroup>
-                <col style="width:7%" />
-                <col style="width:41%" />
+                <col style="width:5%" />
+                <col style="width:35%" />
                 <col style="width:10%" />
                 <col style="width:11%" />
-                <col style="width:15%" />
-                <col style="width:16%" />
+                <col style="width:19%" />
+                <col style="width:20%" />
               </colgroup>
               <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Tên hàng hoá, dịch vụ</th>
-                  <th>Đơn vị</th>
-                  <th>Số lượng</th>
-                  <th>Đơn giá<br><span id="pCurrency1">(VNĐ)</span></th>
-                  <th>Thành tiền<br><span id="pCurrency2">(VNĐ)</span></th>
+                <tr class="header-top">
+                  <th rowspan="2">STT</th>
+                  <th rowspan="2">Tên hàng hoá, dịch vụ</th>
+                  <th rowspan="2">Đơn vị</th>
+                  <th rowspan="2">Số lượng</th>
+                  <th>Đơn giá</th>
+                  <th>Thành tiền</th>
+                </tr>
+                <tr class="header-unit">
+                  <th id="pCurrency1">(VNĐ)</th>
+                  <th id="pCurrency2">(VNĐ)</th>
                 </tr>
               </thead>
               <tbody id="previewItems"></tbody>
@@ -151,9 +246,9 @@
             <ul class="terms" id="previewTerms"></ul>
 
             <div class="bank-info">
-              <div>CTK: CÔNG TY TNHH IN ĐẠI DƯƠNG VIỆT NAM</div>
-              <div>STK: 115002776534</div>
-              <div>Ngân hàng: Viettinbank chi nhánh Quang Trung</div>
+              <div>CTK: <span id="pBankAccountName"></span></div>
+              <div>STK: <span id="pBankAccountNo"></span></div>
+              <div>Ngân hàng: <span id="pBankName"></span></div>
             </div>
 
             <div class="signature">
@@ -166,50 +261,30 @@
             </div>
           </article>
         </div>
-      </section>
-    </section>
+      </aside>
+    </main>
 
-    <section class="panel history-panel">
-      <div class="panel-header">
-        <div class="section-title" style="margin:0">
-          <h2 style="font-size:16px">Lịch sử báo giá</h2>
-          <div class="history-tools">
-            <button class="btn small" id="downloadJsonBtn">Tải lịch sử JSON</button>
-            <button class="btn small" id="importJsonBtn">Nhập JSON</button>
-            <input type="file" id="jsonFileInput" accept="application/json,.json" hidden />
-            <button class="btn small danger" id="clearHistoryBtn">Xóa lịch sử</button>
-          </div>
+    <section class="history-section" id="historySection">
+      <div class="history-heading">
+        <div>
+          <span class="eyebrow">DATABASE BÁO GIÁ</span>
+          <h2>Lịch sử báo giá</h2>
+          <p>Mỗi báo giá có thể được lưu thành một JSON riêng trong thư mục <code>data/</code>.</p>
+        </div>
+        <div class="history-actions">
+          <input class="history-search" id="historySearch" type="search" placeholder="Tìm PO hoặc khách hàng..." />
+          <button class="btn compact ghost" id="downloadJsonBtn" type="button">Xuất JSON tổng</button>
+          <button class="btn compact ghost" id="importJsonBtn" type="button">Nhập JSON</button>
+          <input type="file" id="jsonFileInput" accept="application/json,.json" hidden />
+          <button class="btn compact danger-soft" id="clearHistoryBtn" type="button">Xóa dữ liệu</button>
         </div>
       </div>
-      <div class="panel-body history-table-wrap">
-        <div id="historyContainer"></div>
-      </div>
+      <div id="historyContainer" class="history-container"></div>
     </section>
-  </main>
+  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+  <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
   <script src="app.js"></script>
-  <script>
-    (() => {
-      const oldBtn = document.getElementById('pdfBtn');
-      if (!oldBtn) return;
-      const pdfBtn = oldBtn.cloneNode(true);
-      oldBtn.replaceWith(pdfBtn);
-      pdfBtn.addEventListener('click', () => {
-        const oldTitle = document.title;
-        const quoteNo = (document.getElementById('pQuoteNo')?.textContent || 'bao-gia').trim();
-        document.title = quoteNo.replace(/[^a-zA-Z0-9_-]+/g, '-');
-        const status = document.getElementById('status');
-        if (status) {
-          status.textContent = 'Đang mở bản in PDF chất lượng cao. Chọn “Save as PDF / Lưu thành PDF” trong hộp thoại in.';
-          status.className = 'status ok';
-        }
-        const restore = () => { document.title = oldTitle; window.removeEventListener('afterprint', restore); };
-        window.addEventListener('afterprint', restore);
-        requestAnimationFrame(() => requestAnimationFrame(() => window.print()));
-        setTimeout(() => { if (document.title !== oldTitle) document.title = oldTitle; }, 120000);
-      });
-    })();
-  </script>
 </body>
 </html>
